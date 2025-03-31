@@ -1,9 +1,9 @@
-// models/Vehicle.js
+// models/Vehicle.ts
 import mongoose from "mongoose";
 
 const VehicleSchema = new mongoose.Schema({
 	size: {
-		type: int,
+		type: Number,
 		required: true,
 	},
     parked: {
