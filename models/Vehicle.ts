@@ -1,13 +1,18 @@
-export default abstract class Vehicle {
+import { VehicleType, VehicleSize } from "../lib/vehicleConstant";
 
-    protected size: number;
-    protected description: string;
+export default abstract class Vehicle {
+    protected type!: VehicleType;
+    protected size!: VehicleSize;
+    protected licensePlate: string;
     protected parked: boolean;
 
-    constructor(size: number, description: string) {
-        this.size = size;
-        this.description = description;
+    constructor(licensePlate: string) {
+        this.licensePlate = licensePlate;
         this.parked = false;
+    }
+
+    getLicensePlate() {
+        return this.licensePlate;
     }
 
     getSize() {
