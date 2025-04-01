@@ -1,20 +1,18 @@
+import ParkingSpot from "./ParkingSpot";
 import Vehicle from "./Vehicle";
 
 export default class Level {
     private level: number;
-    private spots: Vehicle[] = [];
-    private availableSpots: number = 10;
+    private spots: ParkingSpot[] = [];
+    private availableSpots: number = 0;
+    private static SPOTS_PER_ROW: number = 10;
 
+    // TODO: Continue implementing the constructor to create parking spots
     constructor(level: number) {
         this.level = level;
     }
 
-    parkVehicle(vehicle: Vehicle) {
-        if (this.availableSpots > vehicle.getSize()) {
-            this.spots.push(vehicle);
-            this.availableSpots--;
-            return true;
-        }
-        return false;
+    spotFreed() {
+        this.availableSpots++;
     }
 }
