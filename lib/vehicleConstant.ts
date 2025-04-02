@@ -1,15 +1,8 @@
 enum VehicleSize {
-    NONE = 0,
-    SMALL = 1,
-    MEDIUM = 2,
-    LARGE = 5,
-}
-
-enum VehicleType {
     VEHICLE,
-    MOTORCYCLE,
-    CAR,
-    BUS,
+    SMALL,
+    MEDIUM,
+    LARGE,
 }
 
-export { VehicleType, VehicleSize };
+export { VehicleSize };

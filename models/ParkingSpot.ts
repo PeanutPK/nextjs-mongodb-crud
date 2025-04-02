@@ -1,21 +1,16 @@
-import { VehicleSize } from "../lib/vehicleConstant";
 import Level from "./Level";
 import Vehicle from "./Vehicle";
+import { VehicleSize } from "../lib/vehicleConstant";
 
 export default class ParkingSpot {
 	private vehicle: Vehicle | null = null;
 	private spotSize: VehicleSize;
-	private level: Level;
+	private floorLevel: Level;
 	private spotNumber: number;
 	private row: number;
 
-	constructor(
-		lvl: Level,
-		row: number,
-		spotNumber: number,
-		size: VehicleSize
-	) {
-		this.level = lvl;
+	constructor(lvl: Level, row: number, spotNumber: number, size: number) {
+		this.floorLevel = lvl;
 		this.row = row;
 		this.spotNumber = spotNumber;
 		this.spotSize = size;
@@ -26,7 +21,7 @@ export default class ParkingSpot {
 	}
 
 	canFitVehicle(vehicle: Vehicle): boolean {
-		return this.isAvailable() && vehicle.getSize() <= this.spotSize;
+		return this.isAvailable() && vehicle.canFitInSpot(this);
 	}
 
 	parkVehicle(vehicle: Vehicle): boolean {
@@ -38,10 +33,8 @@ export default class ParkingSpot {
 	}
 
 	removeVehicle(): void {
-		if (this.vehicle !== null) {
-			this.level.spotFreed();
-			this.vehicle = null;
-		}
+		this.floorLevel.spotFreed();
+		this.vehicle = null;
 	}
 
 	getRow(): number {

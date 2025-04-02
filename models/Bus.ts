@@ -1,11 +1,17 @@
-import { VehicleSize, VehicleType } from "../lib/vehicleConstant";
+import { VehicleSize } from "../lib/vehicleConstant";
+import ParkingSpot from "./ParkingSpot";
 import Vehicle from "./Vehicle";
 
 export default class Bus extends Vehicle {
 	constructor(licensePlate: string) {
 		super(licensePlate);
-		this.type = VehicleType.BUS;
-		this.size = VehicleSize.LARGE;
+		this.spotNeeded = 5;
+		this.vehicleType = "Bus";
+		this.vehicleSize = VehicleSize.LARGE;
+	}
+
+	canFitInSpot(spot: ParkingSpot): boolean {
+		return spot.getSpotSize() === VehicleSize.LARGE;
 	}
 
 	print(): void {

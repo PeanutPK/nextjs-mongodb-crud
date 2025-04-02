@@ -7,9 +7,9 @@ export default class ParkingLot {
     private static NUM_LEVELS: number = 5;
 
     private constructor() {
-        this.levels = new Array<Level>(ParkingLot.NUM_LEVELS);
+        this.levels = [];
         for (let i = 0; i < ParkingLot.NUM_LEVELS; i++) {
-            this.levels[i] = new Level(i, 30);
+            this.levels.push(new Level(i, 30));
         }
     }
 
@@ -30,7 +30,6 @@ export default class ParkingLot {
                 return true;
             }
         }
-        
         return false;
     }
 }

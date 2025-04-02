@@ -1,39 +1,45 @@
-import { VehicleType, VehicleSize } from "../lib/vehicleConstant";
+import { VehicleSize } from "../lib/vehicleConstant";
 import ParkingSpot from "./ParkingSpot";
 
 export default abstract class Vehicle {
-    protected parkingSpots: ParkingSpot[] = [];
-    protected type: VehicleType = VehicleType.VEHICLE;
-    protected size: VehicleSize = VehicleSize.NONE;
-    protected licensePlate: string;
-    protected parked: boolean;
+	protected parkingSpots: ParkingSpot[] = [];
+	protected vehicleType: string = "Vehicle";
+    protected vehicleSize: VehicleSize = VehicleSize.VEHICLE;
+	protected spotNeeded: number = 0;
+	protected licensePlate: string;
 
-    constructor(licensePlate: string) {
-        this.licensePlate = licensePlate;
-        this.parked = false;
+	constructor(licensePlate: string) {
+		this.licensePlate = licensePlate;
+	}
+
+	getParkingSpots() {
+		return this.parkingSpots;
+	}
+
+	getLicensePlate() {
+		return this.licensePlate;
+	}
+
+    getVehicleSize() {
+        return this.vehicleSize;
     }
 
-    getLicensePlate() {
-        return this.licensePlate;
+    getVehicleType() {
+        return this.vehicleType;
     }
 
-    getSize() {
-        return this.size;
-    }
+	getSpotNeeded() {
+		return this.spotNeeded;
+	}
 
-    parkInSpot(spot: ParkingSpot): void {
-        if (!this.parked) {
-            this.parkingSpots.push(spot)
-            this.parked = true;
-        }
-    }
+	parkInSpot(spot: ParkingSpot): void {
+        this.parkingSpots.push(spot);
+	}
 
-    clearSpot(): void {
-        if (this.parked) {
-            this.parkingSpots = [];
-            this.parked = false;
-        }
-    }
+	clearSpot(): void {
+        this.parkingSpots = [];
+	}
 
-    abstract print(): void;
+    abstract canFitInSpot(spot: ParkingSpot): boolean;
+	abstract print(): void;
 }

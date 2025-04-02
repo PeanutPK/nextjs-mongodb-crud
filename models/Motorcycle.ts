@@ -1,14 +1,24 @@
-import { VehicleSize, VehicleType } from "../lib/vehicleConstant";
+import { VehicleSize } from "../lib/vehicleConstant";
+import ParkingSpot from "./ParkingSpot";
 import Vehicle from "./Vehicle";
 
 export default class Motorcycle extends Vehicle {
-    constructor(licensePlate: string) {
-        super(licensePlate);
-        this.type = VehicleType.MOTORCYCLE;
-        this.size = VehicleSize.SMALL;
-    }
+	constructor(licensePlate: string) {
+		super(licensePlate);
+		this.spotNeeded = 1;
+		this.vehicleType = "Motorcycle";
+		this.vehicleSize = VehicleSize.SMALL;
+	}
 
-    print(): void {
-        console.log("Motor", this.getLicensePlate());
-    }
+	canFitInSpot(spot: ParkingSpot): boolean {
+		return (
+			spot.getSpotSize() === VehicleSize.SMALL ||
+			spot.getSpotSize() === VehicleSize.MEDIUM ||
+			spot.getSpotSize() === VehicleSize.LARGE
+		);
+	}
+
+	print(): void {
+		console.log("Motor", this.getLicensePlate());
+	}
 }
