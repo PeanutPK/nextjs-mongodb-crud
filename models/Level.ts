@@ -8,10 +8,9 @@ export default class Level {
 	private availableSpots: number = 0;
 	private static SPOTS_PER_ROW: number = 10;
 
-	// TODO: Continue implementing the constructor to create parking spots
 	constructor(level: number, numberOfSpots: number) {
 		this.level = level;
-		this.spots = new Array<ParkingSpot>(numberOfSpots);
+		this.spots = [];
 
 		const largeSpot: number = numberOfSpots / 4;
 		const motorcycleSpot: number = numberOfSpots / 4;
@@ -24,8 +23,8 @@ export default class Level {
 			} else if (i < largeSpot + compactSpot) {
 				vehicleSize = VehicleSize.MEDIUM;
 			}
-			const row: number = i / Level.SPOTS_PER_ROW;
-			this.spots[i] = new ParkingSpot(this, row, i, vehicleSize);
+			const row: number = Math.floor(i / Level.SPOTS_PER_ROW);
+			this.spots.push(new ParkingSpot(this, row, i, vehicleSize));
 		}
 		this.availableSpots = numberOfSpots;
 	}
