@@ -1,6 +1,8 @@
 import { VehicleType, VehicleSize } from "../lib/vehicleConstant";
+import ParkingSpot from "./ParkingSpot";
 
 export default abstract class Vehicle {
+    protected parkingSpots: ParkingSpot[] = [];
     protected type!: VehicleType;
     protected size!: VehicleSize;
     protected licensePlate: string;
@@ -19,11 +21,19 @@ export default abstract class Vehicle {
         return this.size;
     }
 
-    parkInSpot() {
-        this.parked = true;
+    parkInSpot(spot: ParkingSpot): void {
+        if (!this.parked) {
+            this.parkingSpots.push(spot)
+            this.parked = true;
+        }
     }
 
-    clearSpot() {
-        this.parked = false;
+    clearSpot(): void {
+        if (this.parked) {
+            this.parkingSpots = [];
+            this.parked = false;
+        }
     }
+
+    abstract print(): void;
 }

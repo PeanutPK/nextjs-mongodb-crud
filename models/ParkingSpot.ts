@@ -3,25 +3,34 @@ import Level from "./Level";
 import Vehicle from "./Vehicle";
 
 export default class ParkingSpot {
-    private vehicle: Vehicle | null = null;
-    private spotSize: VehicleSize;
-    private level: Level;
-    private spotNumber: number;
-    private row: number;
+	private vehicle: Vehicle | null = null;
+	private spotSize: VehicleSize;
+	private level: Level;
+	private spotNumber: number;
+	private row: number;
 
-	constructor(lvl: Level, row: number, spotNumber: number, size: VehicleSize) {
-        this.level = lvl;
-        this.row = row;
+	constructor(
+		lvl: Level,
+		row: number,
+		spotNumber: number,
+		size: VehicleSize
+	) {
+		this.level = lvl;
+		this.row = row;
 		this.spotNumber = spotNumber;
 		this.spotSize = size;
 	}
 
-    isAvailable(): boolean {
-        return this.vehicle === null;
-    }
+	isAvailable(): boolean {
+		return this.vehicle === null;
+	}
+
+	canFitVehicle(vehicle: Vehicle): boolean {
+		return this.isAvailable() && vehicle.getSize() <= this.spotSize;
+	}
 
 	parkVehicle(vehicle: Vehicle): boolean {
-		if (this.isAvailable() && vehicle.getSize() <= this.spotSize) {
+		if (this.canFitVehicle(vehicle)) {
 			this.vehicle = vehicle;
 			return true;
 		}
@@ -29,19 +38,37 @@ export default class ParkingSpot {
 	}
 
 	removeVehicle(): void {
-        this.level.spotFreed();
-		this.vehicle = null;
+		if (this.vehicle !== null) {
+			this.level.spotFreed();
+			this.vehicle = null;
+		}
 	}
 
-    getRow(): number {
-        return this.row;
-    }
+	getRow(): number {
+		return this.row;
+	}
 
-    getSpotNumber(): number {
-        return this.spotNumber;
-    }
+	getSpotNumber(): number {
+		return this.spotNumber;
+	}
 
-    getSpotSize(): VehicleSize {
-        return this.spotSize;
-    }
+	getSpotSize(): VehicleSize {
+		return this.spotSize;
+	}
+
+	print(): void {
+		if (this.vehicle === null) {
+			if (this.spotSize === VehicleSize.SMALL) {
+				console.log("Small Spot");
+			}
+			if (this.spotSize === VehicleSize.MEDIUM) {
+				console.log("Medium Spot");
+			}
+			if (this.spotSize === VehicleSize.LARGE) {
+				console.log("Large Spot");
+			}
+		} else {
+			console.log(this.vehicle.print());
+		}
+	}
 }

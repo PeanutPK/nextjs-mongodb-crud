@@ -8,4 +8,8 @@ export default class Bus extends Vehicle {
     constructor(licensePlate: string) {
         super(licensePlate);
     }
+
+    print(): void {
+        console.log("Bus", this.getLicensePlate());
+    }
 }
