@@ -1,8 +1,8 @@
-// models/Vehicle.ts
+// models/VehicleSchema.ts
 import mongoose from "mongoose";
 
 const VehicleSchema = new mongoose.Schema({
-	size: {
+	levelNumber: {
 		type: Number,
 		required: true,
 	},
