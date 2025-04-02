@@ -3,8 +3,8 @@ import ParkingSpot from "./ParkingSpot";
 
 export default abstract class Vehicle {
     protected parkingSpots: ParkingSpot[] = [];
-    protected type!: VehicleType;
-    protected size!: VehicleSize;
+    protected type: VehicleType = VehicleType.VEHICLE;
+    protected size: VehicleSize = VehicleSize.NONE;
     protected licensePlate: string;
     protected parked: boolean;
 
