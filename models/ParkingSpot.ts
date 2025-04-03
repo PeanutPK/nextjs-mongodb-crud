@@ -27,6 +27,7 @@ export default class ParkingSpot {
 	parkVehicle(vehicle: Vehicle): boolean {
 		if (this.canFitVehicle(vehicle)) {
 			this.vehicle = vehicle;
+            vehicle.parkInSpot(this);
 			return true;
 		}
 		return false;
@@ -36,6 +37,10 @@ export default class ParkingSpot {
 		this.floorLevel.spotFreed();
 		this.vehicle = null;
 	}
+
+    getVehicle(): Vehicle | null {
+        return this.vehicle;
+    }
 
 	getRow(): number {
 		return this.row;

@@ -24,6 +24,15 @@ export default class ParkingLot {
         ParkingLot.instance = null;
     }
 
+    findVehicle(licensePlate: string): boolean {
+        for (let i = 0; i < this.levels.length; i++) {
+            if (this.levels[i].findVehicle(licensePlate)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     parkVehicle(vehicle: Vehicle): boolean {
         for (let i = 0; i < this.levels.length; i++) {
             if (this.levels[i].parkVehicle(vehicle)) {
@@ -31,5 +40,11 @@ export default class ParkingLot {
             }
         }
         return false;
+    }
+
+    print(): void {
+        for (let i = 0; i < 1; i++) {
+            this.levels[i].print();
+        }
     }
 }

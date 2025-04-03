@@ -37,6 +37,9 @@ export default abstract class Vehicle {
 	}
 
 	clearSpot(): void {
+        this.parkingSpots.forEach((spot) => {
+            spot.removeVehicle();
+        })
         this.parkingSpots = [];
 	}
 

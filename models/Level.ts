@@ -74,6 +74,17 @@ export default class Level {
 		return -1;
 	}
 
+    findVehicle(licensePlate: string): boolean {
+        for (let i = 0; i < this.spots.length; i++) {
+            const spot = this.spots[i];
+            const vehicle = spot.getVehicle();
+            if (vehicle?.getLicensePlate() === licensePlate) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 	print(): void {
 		let lastRow: number = -1;
 		for (let i = 0; i < this.spots.length; i++) {
