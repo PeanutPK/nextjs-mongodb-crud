@@ -1,17 +1,22 @@
-// models/VehicleSchema.ts
 import mongoose from "mongoose";
 
 const VehicleSchema = new mongoose.Schema({
-	levelNumber: {
+	level: {
 		type: Number,
 		required: true,
 	},
-    parked: {
-        type: Boolean,
+    spotNumber: {
+        type: Number,
         required: true,
-        default: false,
     },
-	description: String,
+    vehicleType: {
+        enum: ["Car", "Motorcycle", "Bus"],
+        required: true,
+    },
+    licensePlate: {
+        type: String,
+        required: true,
+    }
 });
 
-export default mongoose.models.Item || mongoose.model("Vehicle", VehicleSchema);
+export default mongoose.models.Vehicle || mongoose.model("Vehicle", VehicleSchema);
