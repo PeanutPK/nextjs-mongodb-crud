@@ -24,6 +24,17 @@ export default class ParkingLot {
         ParkingLot.instance = null;
     }
 
+    getLevels(): Level[] {
+        return this.levels;
+    }
+
+    getLevelByNumber(levelNumber: number): Level {
+        if (levelNumber < 0 || levelNumber >= this.levels.length) {
+            throw new Error("Invalid level number");
+        }
+        return this.levels[levelNumber];
+    }
+
     findVehicle(licensePlate: string): boolean {
         for (let i = 0; i < this.levels.length; i++) {
             if (this.levels[i].findVehicle(licensePlate)) {
@@ -36,6 +47,15 @@ export default class ParkingLot {
     parkVehicle(vehicle: Vehicle): boolean {
         for (let i = 0; i < this.levels.length; i++) {
             if (this.levels[i].parkVehicle(vehicle)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    removeVehicle(licensePlate: string): boolean {
+        for (let i = 0; i < this.levels.length; i++) {
+            if (this.levels[i].removeVehicle(licensePlate)) {
                 return true;
             }
         }

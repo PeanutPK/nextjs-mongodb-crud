@@ -1,8 +1,8 @@
 enum VehicleSize {
-    VEHICLE,
-    SMALL,
-    MEDIUM,
-    LARGE,
+    VEHICLE="VEHICLE",
+    SMALL="SMALL",
+    MEDIUM="MEDIUM",
+    LARGE="LARGE",
 }
 
 export { VehicleSize };

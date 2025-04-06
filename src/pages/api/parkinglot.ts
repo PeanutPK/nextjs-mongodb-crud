@@ -1,7 +1,7 @@
 // pages/api/items.js
 import dbConnect from "../../../lib/mongodb";
 import Item from "../../../models/Item";
-import Vehicle from "../../../models/VehicleSchema";
+import { ParkingLot as ParkingLotModel } from "../../../models/ParkingLotSchema";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

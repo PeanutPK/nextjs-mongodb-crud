@@ -29,6 +29,21 @@ export default class Level {
 		this.availableSpots = numberOfSpots;
 	}
 
+	getLevel(): number {
+		return this.level;
+	}
+
+	getSpots(): ParkingSpot[] {
+		return this.spots;
+	}
+
+    getSpotByNumber(spotNumber: number): ParkingSpot {
+        if (spotNumber < 0 || spotNumber >= this.spots.length) {
+            throw new Error("Invalid spot number");
+        }
+        return this.spots[spotNumber];
+    }
+
 	getAvailableSpots() {
 		return this.availableSpots;
 	}
@@ -38,6 +53,19 @@ export default class Level {
 		const spotNumber: number = this.findAvailableSpots(vehicle);
 		if (spotNumber < 0) return false;
 		return this.parkStartingAtSpot(spotNumber, vehicle);
+	}
+
+	removeVehicle(licensePlate: string): boolean {
+		for (let i = 0; i < this.spots.length; i++) {
+			const spot = this.spots[i];
+			const vehicle = spot.getVehicle();
+
+			if (vehicle && vehicle.getLicensePlate() === licensePlate) {
+				vehicle.clearSpot();
+				return true;
+			}
+		}
+		return false;
 	}
 
 	parkStartingAtSpot(spotNumber: number, vehicle: Vehicle): boolean {
@@ -74,16 +102,16 @@ export default class Level {
 		return -1;
 	}
 
-    findVehicle(licensePlate: string): boolean {
-        for (let i = 0; i < this.spots.length; i++) {
-            const spot = this.spots[i];
-            const vehicle = spot.getVehicle();
-            if (vehicle?.getLicensePlate() === licensePlate) {
-                return true;
-            }
-        }
-        return false;
-    }
+	findVehicle(licensePlate: string): boolean {
+		for (let i = 0; i < this.spots.length; i++) {
+			const spot = this.spots[i];
+			const vehicle = spot.getVehicle();
+			if (vehicle?.getLicensePlate() === licensePlate) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	print(): void {
 		let lastRow: number = -1;
