@@ -76,24 +76,42 @@ export default function Home() {
 		const MAX_LICENSE_PLATE_LENGTH = 10;
 		return spots.map((spot: IParkingSpot, index: number) => {
 			const vehicle: IVehicle | null = spot.vehicle;
-			let displayLicensePlate = "Available"; // Default
+			let displayLicensePlate = "Available";
+			let isAvailable = true;
 
 			if (vehicle) {
+				isAvailable = false;
 				if (vehicle.licensePlate.length > MAX_LICENSE_PLATE_LENGTH) {
-				displayLicensePlate =
-					vehicle.licensePlate.substring(0, MAX_LICENSE_PLATE_LENGTH) + "...";
+					displayLicensePlate =
+						vehicle.licensePlate.substring(
+							0,
+							MAX_LICENSE_PLATE_LENGTH
+						) + "...";
 				} else {
-				displayLicensePlate = vehicle.licensePlate;
+					displayLicensePlate = vehicle.licensePlate;
 				}
 			}
 
 			return (
 				<tr key={index}>
-					<td className="ps-5">{spot.level}</td>
+					<td>{spot.level}</td>
 					<td>{spot.row}</td>
 					<td>{spot.spotNumber}</td>
 					<td>{spot.vehicleSize}</td>
-					<td className="w-10%">{displayLicensePlate}</td>
+					<td
+						className={`w-10% ${
+							isAvailable ? `text-green-400` : ""
+						}`}>
+						{displayLicensePlate}
+					</td>
+					<td>
+						<button
+							type="submit"
+							className="leave-button"
+							disabled={isAvailable}>
+							Leave
+						</button>
+					</td>
 				</tr>
 			);
 		});
@@ -112,6 +130,7 @@ export default function Home() {
 								<th>Spot Number</th>
 								<th>Vehicle Size</th>
 								<th>License Plate</th>
+								<th>Remove Vehicle</th>
 							</tr>
 						</thead>
 						<tbody>{spotsTableMap(level.spots)}</tbody>
@@ -148,7 +167,9 @@ export default function Home() {
 								placeholder="License Plate"
 								required
 							/>
-							<button type="submit">Park Vehicle</button>
+							<button type="submit" className="park-button">
+								Park Vehicle
+							</button>
 						</form>
 					</div>
 					{message && <h3>{message}</h3>}
