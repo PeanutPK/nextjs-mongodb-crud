@@ -59,5 +59,5 @@ const parkingLotSchema = new Schema<IParkingLot>({
 });
 
 // ParkingLot model
-export default mongoose.model<IParkingLot>("ParkingLotModel", parkingLotSchema);
+export default mongoose.models.ParkingLotModel || mongoose.model("ParkingLotModel", parkingLotSchema);
 export type { IVehicle, IParkingSpot, ILevel, IParkingLot };
