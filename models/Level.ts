@@ -17,10 +17,10 @@ export default class Level {
 		const compactSpot: number = numberOfSpots - largeSpot - motorcycleSpot;
 
 		for (let i = 0; i < numberOfSpots; i++) {
-			let vehicleSize: VehicleSize = VehicleSize.SMALL;
-			if (i < largeSpot) {
-				vehicleSize = VehicleSize.LARGE;
-			} else if (i < largeSpot + compactSpot) {
+			let vehicleSize: VehicleSize = VehicleSize.LARGE;
+			if (i < motorcycleSpot) {
+				vehicleSize = VehicleSize.SMALL;
+			} else if (i < motorcycleSpot + compactSpot) {
 				vehicleSize = VehicleSize.MEDIUM;
 			}
 			const row: number = Math.floor(i / Level.SPOTS_PER_ROW);
