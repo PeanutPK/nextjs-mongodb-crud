@@ -73,15 +73,27 @@ export default function Home() {
 	};
 
 	const spotsTableMap = (spots: IParkingSpot[]) => {
+		const MAX_LICENSE_PLATE_LENGTH = 10;
 		return spots.map((spot: IParkingSpot, index: number) => {
 			const vehicle: IVehicle | null = spot.vehicle;
+			let displayLicensePlate = "Available"; // Default
+
+			if (vehicle) {
+				if (vehicle.licensePlate.length > MAX_LICENSE_PLATE_LENGTH) {
+				displayLicensePlate =
+					vehicle.licensePlate.substring(0, MAX_LICENSE_PLATE_LENGTH) + "...";
+				} else {
+				displayLicensePlate = vehicle.licensePlate;
+				}
+			}
+
 			return (
 				<tr key={index}>
-					<td>{spot.level}</td>
+					<td className="ps-5">{spot.level}</td>
 					<td>{spot.row}</td>
 					<td>{spot.spotNumber}</td>
 					<td>{spot.vehicleSize}</td>
-					<td>{vehicle ? vehicle.licensePlate : "Available"}</td>
+					<td className="w-10%">{displayLicensePlate}</td>
 				</tr>
 			);
 		});
@@ -139,7 +151,7 @@ export default function Home() {
 							<button type="submit">Park Vehicle</button>
 						</form>
 					</div>
-					{message && <p>{message}</p>}
+					{message && <h3>{message}</h3>}
 					{levelsMap(parkingLot.levels)}
 				</div>
 			) : (

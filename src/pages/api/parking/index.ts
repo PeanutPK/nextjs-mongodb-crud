@@ -21,9 +21,12 @@ export default async function handler(
 				let parkingLot: IParkingLot | null =
 					await ParkingLotModel.findOne({});
 				if (!parkingLot) {
+					console.log("No parking lot found in DB, creating new one");
 					// reset then create new parking lot
 					ParkingLot.resetInstance();
-					parkingLot = await ParkingLot.getInstance().createModel();
+					const parkingLotData =
+						ParkingLot.getInstance().getInstanceData();
+					parkingLot = await ParkingLotModel.create(parkingLotData);
 					res.status(201).json({ success: true, data: parkingLot });
 				} else {
 					ParkingLot.getInstance().insertData(parkingLot);
@@ -45,10 +48,10 @@ export default async function handler(
 					});
 				}
 
-				const parkingLot = await ParkingLot.getInstance();
+				const parkingLot = ParkingLot.getInstance();
 				const vehicle = VehicleFactory.createVehicle(
-					vehicleType,
-					licensePlate
+					licensePlate,
+					vehicleType
 				);
 				if (!vehicle) {
 					return res.status(400).json({
@@ -56,12 +59,32 @@ export default async function handler(
 						message: "Invalid vehicle type",
 					});
 				}
-				parkingLot.parkVehicle(vehicle);
-				const updatedParkingLot = await ParkingLotModel.findOne({});
+				const parkSuccess: boolean = parkingLot.parkVehicle(vehicle);
+				if (parkSuccess) {
+					const oldParkingLot = await ParkingLotModel.findOne({});
 
-				res.status(201).json({ success: true, data: newParkingLot });
+					let newParkingLot: IParkingLot | null = null;
+					if (oldParkingLot) {
+						await ParkingLotModel.updateOne(
+							{},
+							parkingLot.getInstanceData()
+						);
+						newParkingLot = await ParkingLotModel.findOne({});
+					} else {
+						newParkingLot = await ParkingLotModel.create(
+							parkingLot.getInstanceData()
+						);
+					}
+					res.status(201).json({ success: true, data: newParkingLot });
+				} else {
+					res.status(400).json({
+						success: false,
+						message: "Not enough space for this vehicle",
+					});
+				}
 			} catch (error) {
 				res.status(400).json({ success: false, error: error });
+				console.log("Error parking vehicle:", error);
 			}
 			break;
 		default:
