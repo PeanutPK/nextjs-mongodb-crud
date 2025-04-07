@@ -21,6 +21,8 @@ export default function Home() {
 	});
 
 	const fetchParkingLot = async () => {
+		setLoading(true);
+		console.log("Fetching parking lot data...");
 		try {
 			const response = await fetch("/api/parking");
 			const data = await response.json();
@@ -46,7 +48,36 @@ export default function Home() {
 		setForm({ ...form, [e.target.name]: e.target.value });
 	};
 
-	const handleSubmit = async (e: React.FormEvent) => {
+	const handleLeaveSubmit = async (licensePlate: string) => {
+		try {
+			const res = await fetch(`/api/parking`, {
+				// Updated endpoint
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json", // If you send data in the body
+				},
+				body: JSON.stringify({ licensePlate }), // Send license plate in the request body
+			});
+
+			const data = await res.json();
+			console.log("Response data:", data); // Log the response data for debugging
+			if (data.success) {
+				setMessage(`Vehicle ${licensePlate} left successfully!`);
+				fetchParkingLot();
+				setForm({ licensePlate: "", vehicleType: "" });
+			} else {
+				setMessage(
+					data.message || `Failed to remove vehicle ${licensePlate}`
+				);
+				console.error("Error removing vehicle:", data);
+			}
+		} catch (error) {
+			setMessage("Error removing vehicle. Please try again.");
+			console.error("Error removing vehicle:", error);
+		}
+	};
+
+	const handleParkSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {
 			const res = await fetch("/api/parking", {
@@ -108,6 +139,9 @@ export default function Home() {
 						<button
 							type="submit"
 							className="leave-button"
+							onClick={() =>
+								handleLeaveSubmit(displayLicensePlate)
+							}
 							disabled={isAvailable}>
 							Leave
 						</button>
@@ -148,7 +182,7 @@ export default function Home() {
 			) : parkingLot ? (
 				<div>
 					<div className="form-container">
-						<form onSubmit={handleSubmit}>
+						<form onSubmit={handleParkSubmit}>
 							<select
 								name="vehicleType"
 								value={form.vehicleType}

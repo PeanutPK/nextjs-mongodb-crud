@@ -1,4 +1,4 @@
-// pages/api/items.js
+// pages/api/parking
 import { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "../../../../lib/mongodb";
 import ParkingLotModel, {
@@ -75,7 +75,10 @@ export default async function handler(
 							parkingLot.getInstanceData()
 						);
 					}
-					res.status(201).json({ success: true, data: newParkingLot });
+					res.status(201).json({
+						success: true,
+						data: newParkingLot,
+					});
 				} else {
 					res.status(400).json({
 						success: false,
@@ -85,6 +88,57 @@ export default async function handler(
 			} catch (error) {
 				res.status(400).json({ success: false, error: error });
 				console.log("Error parking vehicle:", error);
+			}
+			break;
+		case "DELETE":
+			try {
+				const { licensePlate } = req.body;
+				console.log(
+					"License plate:",
+					licensePlate,
+					typeof licensePlate
+				);
+				if (!licensePlate) {
+					return res.status(400).json({
+						success: false,
+						message: "Please provide license plate",
+					});
+				}
+
+				const parkingLot = ParkingLot.getInstance();
+				const removeSuccess: boolean =
+					parkingLot.removeVehicle(licensePlate);
+				if (removeSuccess) {
+					console.log("Removed vehicle:", licensePlate);
+					console.log("Current Parking lot:", parkingLot);
+					console.log("Find vehicle:", parkingLot.findVehicle(licensePlate));
+					const oldParkingLot = await ParkingLotModel.findOne({});
+
+					let newParkingLot: IParkingLot | null = null;
+					if (oldParkingLot) {
+						await ParkingLotModel.updateOne(
+							{},
+							parkingLot.getInstanceData()
+						);
+						newParkingLot = await ParkingLotModel.findOne({});
+					} else {
+						newParkingLot = await ParkingLotModel.create(
+							parkingLot.getInstanceData()
+						);
+					}
+					res.status(201).json({
+						success: true,
+						data: newParkingLot,
+					});
+				} else {
+					res.status(400).json({
+						success: false,
+						message: "Cannot find vehicle with this license plate",
+					});
+				}
+			} catch (error) {
+				res.status(400).json({ success: false, error: error });
+				console.log("Error removing vehicle:", error);
 			}
 			break;
 		default:

@@ -71,7 +71,7 @@ export default class Level {
 			const vehicle = spot.getVehicle();
 
 			if (vehicle && vehicle.getLicensePlate() === licensePlate) {
-				vehicle.clearSpot();
+				spot.removeVehicle();
 				return true;
 			}
 		}
@@ -79,6 +79,7 @@ export default class Level {
 	}
 
 	parkStartingAtSpot(spotNumber: number, vehicle: Vehicle): boolean {
+		this.removeVehicle(vehicle.getLicensePlate());
 		vehicle.clearSpot();
 		let success: boolean = true;
 		for (

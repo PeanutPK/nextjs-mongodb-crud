@@ -38,14 +38,23 @@ describe("ParkingLot", () => {
 		expect(parkingLot.parkVehicle(bus)).toBe(true);
 	});
 
-	test("removeVehicle", () => {
+	test("removeVehicleClearSpot", () => {
 		expect(parkingLot.findVehicle(car.getLicensePlate())).toBe(false);
 		expect(parkingLot.parkVehicle(car)).toBe(true);
-		expect(parkingLot.parkVehicle(motorcycle)).toBe(true);
-		expect(parkingLot.parkVehicle(bus)).toBe(true);
 		// check if park then remove
 		expect(parkingLot.findVehicle(car.getLicensePlate())).toBe(true);
 		car.clearSpot();
+		expect(parkingLot.findVehicle(car.getLicensePlate())).toBe(false);
+
+		expect(parkingLot.parkVehicle(car)).toBe(true);
+	});
+
+	test("removeVehicleLicensePlate", () => {
+		expect(parkingLot.findVehicle(car.getLicensePlate())).toBe(false);
+		expect(parkingLot.parkVehicle(car)).toBe(true);
+		// check if park then remove
+		expect(parkingLot.findVehicle(car.getLicensePlate())).toBe(true);
+		expect(parkingLot.removeVehicle(car.getLicensePlate())).toBe(true);
 		expect(parkingLot.findVehicle(car.getLicensePlate())).toBe(false);
 
 		expect(parkingLot.parkVehicle(car)).toBe(true);
