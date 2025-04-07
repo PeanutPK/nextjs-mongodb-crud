@@ -1,5 +1,4 @@
 import mongoose, { Schema, Document } from "mongoose";
-import { VehicleSize } from "../lib/vehicleConstant";
 
 // Vehicle interface
 interface IVehicle {
@@ -33,7 +32,7 @@ interface IParkingLot extends Document {
 // Vehicle Schema
 const vehicleSchema = new Schema<IVehicle>({
 	licensePlate: { type: String, required: true },
-	vehicleSize: { type: String, required: true, enum: [VehicleSize.SMALL, VehicleSize.MEDIUM, VehicleSize.LARGE] },
+	vehicleSize: { type: String, required: true, enum: ["SMALL", "MEDIUM", "LARGE"] },
 	vehicleType: { type: String, required: true, enum: ["Car", "Motorcycle", "Bus"] },
 	spotNeeded: { type: Number, required: true },
 });
