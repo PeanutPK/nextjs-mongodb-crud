@@ -37,12 +37,22 @@ export default class Level {
 		return this.spots;
 	}
 
-    getSpotByNumber(spotNumber: number): ParkingSpot {
-        if (spotNumber < 0 || spotNumber >= this.spots.length) {
-            throw new Error("Invalid spot number");
-        }
-        return this.spots[spotNumber];
-    }
+	setSpots(spots: ParkingSpot[]): void {
+		this.spots = spots;
+		this.availableSpots = spots.length;
+		for (const spot of spots) {
+			if (spot.getVehicle()) {
+				this.availableSpots--;
+			}
+		}
+	}
+
+	getSpotByNumber(spotNumber: number): ParkingSpot {
+		if (spotNumber < 0 || spotNumber >= this.spots.length) {
+			throw new Error("Invalid spot number");
+		}
+		return this.spots[spotNumber];
+	}
 
 	getAvailableSpots() {
 		return this.availableSpots;

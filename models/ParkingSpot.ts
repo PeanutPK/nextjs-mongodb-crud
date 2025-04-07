@@ -9,7 +9,8 @@ export default class ParkingSpot {
 	private spotNumber: number;
 	private row: number;
 
-	constructor(lvl: Level, row: number, spotNumber: number, size: number) {
+	constructor(lvl: Level, row: number, spotNumber: number, size: VehicleSize, vehicle: Vehicle | null = null) {
+		this.vehicle = vehicle;
 		this.floorLevel = lvl;
 		this.row = row;
 		this.spotNumber = spotNumber;

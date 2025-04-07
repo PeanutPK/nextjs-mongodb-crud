@@ -2,7 +2,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "../../../../lib/mongodb";
 import ParkingLotModel, {
+	IParkingLot,
 } from "../../../../models/ParkingLotSchema";
+import ParkingLot from "../../../../models/ParkingLot";
 
 export default async function handler(
 	req: NextApiRequest,
@@ -15,20 +17,23 @@ export default async function handler(
 	switch (method) {
 		case "GET":
 			try {
-				const parkingLot = await ParkingLotModel.findOne();
-                if (!parkingLot) {
-                    return res.status(404).json({ success: false });
-                }
-				res.status(200).json({ success: true, data: parkingLot });
+				let parkingLot: IParkingLot | null = await ParkingLotModel.findOne({});
+				if (!parkingLot) {
+					parkingLot = await ParkingLot.getInstance().createModel();
+					res.status(201).json({ success: true, data: parkingLot });
+				} else {
+					ParkingLot.getInstance().insertData(parkingLot);
+					res.status(200).json({ success: true, data: parkingLot });
+				}
 			} catch (error) {
 				res.status(400).json({ success: false, error: error });
-				console.log(error);
+				console.log("Error fetching parking lot:", error);
 			}
 			break;
 		case "POST":
 			try {
-				const item = await ParkingLotModel.create(req.body);
-				res.status(201).json({ success: true, data: item });
+				const parkingLot = await ParkingLot.getInstance().createModel();
+				res.status(201).json({ success: true, data: parkingLot });
 			} catch (error) {
 				res.status(400).json({ success: false, error: error });
 			}
