@@ -2,7 +2,7 @@ import Level from "./Level";
 import ParkingSpot from "./ParkingSpot";
 import Vehicle from "./Vehicle";
 import { getVehicleSize } from "../lib/vehicleConstant";
-import ParkingLotModel, { IParkingLot } from "./ParkingLotSchema";
+import { IParkingLot } from "./ParkingLotSchema";
 import Car from "./Car";
 import Motorcycle from "./Motorcycle";
 import Bus from "./Bus";
@@ -28,9 +28,12 @@ export default class ParkingLot {
 
 	static resetInstance(): void {
 		ParkingLot.instance = null;
+		ParkingLot.getInstance();
 	}
 
 	insertData(levels: IParkingLot): void {
+		this.levels = []; // Clear existing levels
+
 		for (let i = 0; i < levels.levels.length; i++) {
 			const level = levels.levels[i];
 			const newLevel = new Level(level.level, level.availableSpots);
@@ -56,31 +59,32 @@ export default class ParkingLot {
 		}
 	}
 
-	createModel(): Promise<IParkingLot> {
-		const levelsData = this.levels.map((level) => {
-			return {
-				level: level.getLevel(),
-				availableSpots: level.getAvailableSpots(),
-				spots: level.getSpots().map((spot) => {
-					const vehicle: Vehicle | null = spot.getVehicle();
-					return {
-						level: level.getLevel(),
-						row: spot.getRow(),
-						spotNumber: spot.getSpotNumber(),
-						vehicleSize: spot.getSpotSize(),
-						vehicle: vehicle
-							? {
-									licensePlate: vehicle.getLicensePlate(),
-									vehicleSize: vehicle.getVehicleSize(),
-									vehicleType: vehicle.getVehicleType(),
-									spotNeeded: vehicle.getSpotNeeded(),
-							  }
-							: null,
-					};
-				}),
-			};
-		});
-		return ParkingLotModel.create({ levels: levelsData });
+	getInstanceData() {
+		return {
+			levels: this.levels.map((level) => {
+				return {
+					level: level.getLevel(),
+					availableSpots: level.getAvailableSpots(),
+					spots: level.getSpots().map((spot) => {
+						const vehicle: Vehicle | null = spot.getVehicle();
+						return {
+							level: level.getLevel(),
+							row: spot.getRow(),
+							spotNumber: spot.getSpotNumber(),
+							vehicleSize: spot.getSpotSize(),
+							vehicle: vehicle
+								? {
+										licensePlate: vehicle.getLicensePlate(),
+										vehicleSize: vehicle.getVehicleSize(),
+										vehicleType: vehicle.getVehicleType(),
+										spotNeeded: vehicle.getSpotNeeded(),
+								  }
+								: null,
+						};
+					}),
+				};
+			}),
+		};
 	}
 
 	getLevels(): Level[] {
@@ -93,11 +97,6 @@ export default class ParkingLot {
 		}
 		return this.levels[levelNumber];
 	}
-
-    async updateDatabase(): Promise<void> {
-        const parkingLotData = await this.createModel();
-        await ParkingLotModel.updateOne({ _id: parkingLotData._id }, parkingLotData);
-    }
 
 	findVehicle(licensePlate: string): boolean {
 		for (let i = 0; i < this.levels.length; i++) {
