@@ -71,7 +71,14 @@ export default class Level {
 			const vehicle = spot.getVehicle();
 
 			if (vehicle && vehicle.getLicensePlate() === licensePlate) {
-				spot.removeVehicle();
+				if (vehicle.getSpotNeeded() > 1) {
+					for (let j = 0; j < vehicle.getSpotNeeded(); j++, i++) {
+						this.spots[i].removeVehicle();
+					}
+				} else {
+					spot.removeVehicle();
+				}
+
 				return true;
 			}
 		}
