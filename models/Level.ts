@@ -47,15 +47,15 @@ export default class Level {
 		}
 	}
 
+	getAvailableSpots() {
+		return this.availableSpots;
+	}
+
 	getSpotByNumber(spotNumber: number): ParkingSpot {
 		if (spotNumber < 0 || spotNumber >= this.spots.length) {
 			throw new Error("Invalid spot number");
 		}
 		return this.spots[spotNumber];
-	}
-
-	getAvailableSpots() {
-		return this.availableSpots;
 	}
 
 	parkVehicle(vehicle: Vehicle): boolean {
